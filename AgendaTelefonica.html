@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .main{                 
+            background-color: rgba(131, 125, 133, 0.233);
+            width:1000px;
+            padding:10px ;
+            margin-left:300px;
+            position: absolute;                   
+            }
+        .format1{            
+            width:600px;
+            padding:50px;
+            border: 1px solid;
+            border-radius: 25px;
+            margin:20px;
+            background-color: rgba(44, 34, 13, 0.219);
+            text-align: center;            
+            }
+        #page{
+            width:600px;
+            padding:50px;
+            border: 1px solid;
+            border-radius: 25px;
+            margin:20px;
+            background-color:  rgba(44, 34, 13, 0.219);
+            text-align: center;
+            }
+        #adauga{
+            background-color: rgba(26, 13, 24, 0.281);
+            text-decoration-color: white;
+            text-align: center;
+            font-weight:bold;
+            font-size: large;
+                }
+        .active{
+            background-color: blue;
+            }
+                
+        .hidden{
+            display: none;
+            }
+        #agenda{
+            font-style: normal;
+            font-size: 40px;
+            font-weight: bold;            
+                      
+            }
+        .center{
+            margin-left:auto; 
+            margin-right:auto;
+        }
+        
+
+    </style>
+
+    <script>
+        var list=[
+            {
+                nume:"Ana",
+                telefon:"0770077000"
+            },
+            {
+                nume:"Zoltan",
+                telefon:"0123456789"
+            },
+            {
+                nume:"Ion",
+                telefon:"5555555555"
+            },           
+            {
+                nume:"Lara",
+                telefon:"5555577555"
+            },           
+            {
+                nume:"Mihai",
+                telefon:"5556895555"
+            },
+            
+        ]
+        var indexEdit;
+        function draw(){
+            var str = "";
+            for(var i=0;i<list.length;i++){
+                str+= `
+                    <tr>
+                        <td>${list[i].nume}</td> <br>   
+                        <td>${list[i].telefon}</td>		
+                        <td><input type=button value="Modifica" onclick="edit(${i})">
+                            <input type=button value="Sterge" onclick="del(${i})">
+                        </td>				
+                    </tr>
+                            `
+                }
+            document.querySelector("table tbody").innerHTML = str;
+            }
+
+        function changeVisibility() {
+            document.getElementById("page").style.display = "block";
+        }
+
+        function add(event){
+            changeVisibility()
+            event.preventDefault();                
+            var x=document.querySelector("[name='nume']").value;
+            var y=document.querySelector("[name='telefon']").value;
+            var newEntry = {
+                nume:document.querySelector("[name='nume']").value,
+                telefon:document.querySelector("[name='telefon']").value,
+                };
+            if (x.length!==0 && y.length!==0){
+                if(indexEdit===undefined){					
+                    list.push(newEntry);
+                }else{					
+                    list[indexEdit]=newEntry;
+                    }				
+                    draw();
+                }  else{
+                    alert("Va rugam sa completati toate campurile!");
+                }  
+            document.querySelector("[name='nume']").value=null; 
+            document.querySelector("[name='telefon']").value=null;         
+        }
+                    
+        function edit(idx){
+            document.querySelector("[name='nume']").value=list[idx].nume;
+            document.querySelector("[name='telefon']").value=list[idx].telefon;
+            window.indexEdit = idx;
+        }
+
+        function del(idx) {
+            if(confirm(`Esti sigur ca vrei sa stergi ${list[idx].nume} ?`)){
+                list.splice(idx,1);
+                draw();
+            }
+        }
+
+        function addEnter(event){
+            var x=event.keyCode;
+            if (x==13){
+                add(event);        
+            }
+        }
+    </script>
+
+</head>
+    <body class="main" onload="draw()">
+        <p id="agenda">Agenda</p> 
+        <div class="format1"> 
+            <span style="font-weight:bold;font-size: x-large;">Nume:</span><input type="text" name="nume">	 
+            <span style="font-weight:bold;font-size: x-large;">Telefon:</span><input id="tasta" type="number" name="telefon" onkeypress="addEnter(event)" > <br>
+           <p><input id="adauga" class="active" type="submit" value="ADAUGA CONTACT" onclick="add(event)"></p>
+        </div>
+        <div id="page" class="hidden" >    
+            <table class="center">
+                <thead>
+                    <tr>
+                        <th><span style="font-size: 20px;">Nume</span></th>
+                        <th><span style="font-size: 20px;">Telefon</span></th> <br>
+                    </tr>
+                </thead>
+                    
+                <tbody>                            
+                </tbody>
+            </table>
+        </div>         
+    </body>
+</html>
